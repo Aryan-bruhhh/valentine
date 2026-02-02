@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 40px;
+    font-size: 36px;
+    color: white;
+}
+
+#slideshow {
+    width: 300px;
+    height: 380px;
+    margin: 20px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+#slideshow img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+button {
+    font-size: 22px;
+    padding: 12px 25px;
+    margin: 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#yesBtn {
+    background: #ff2e63;
+    color: white;
+}
+
+#noBtn {
+    background: #555;
+    color: white;
+    position: absolute;
+}
+
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question"></h1>
+
+<div id="slideshow">
+    <img id="slide" src="photo1.jpg">
+</div>
+
+<button id="yesBtn">Yes ❤️</button>
+<button id="noBtn">No</button>
+
+<script>
+const herName = "Harshita";
+const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpeg"];
+
+document.getElementById("question").innerText =
+`Will you be my Valentine, ${herName}? ❤️`;
+
+let index = 0;
+setInterval(() => {
+    index = (index + 1) % photos.length;
+    document.getElementById("slide").src = photos[index];
+}, 2000);
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+let yesScale = 1;
+let noScale = 1;
+
+noBtn.addEventListener("mouseover", () => {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    yesScale += 0.15;
+    noScale -= 0.1;
+
+    yesBtn.style.transform = `scale(${yesScale})`;
+    noBtn.style.transform = `scale(${Math.max(noScale, 0.3)})`;
+});
+
+yesBtn.addEventListener("click", () => {
+    document.body.innerHTML =
+    `<h1 style="margin-top:40vh;font-size:48px;color:white;">
+    I knew you'd say yes, Harshita ❤️
+    </h1>`;
+    confetti();
+});
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
+
+setInterval(createHeart, 300);
+
+function confetti() {
+    for (let i = 0; i < 200; i++) {
+        const c = document.createElement("div");
+        c.style.position = "absolute";
+        c.style.width = "8px";
+        c.style.height = "8px";
+        c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        c.style.left = "50%";
+        c.style.top = "50%";
+        c.style.borderRadius = "50%";
+        document.body.appendChild(c);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const velocity = Math.random() * 6 + 4;
+
+        let x = 0, y = 0;
+
+        const interval = setInterval(() => {
+            x += Math.cos(angle) * velocity;
+            y += Math.sin(angle) * velocity + 2;
+            c.style.transform = `translate(${x}px, ${y}px)`;
+        }, 16);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            c.remove();
+        }, 2000);
+    }
+}
+</script>
+
+</body>
+</html>
